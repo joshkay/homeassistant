@@ -1,0 +1,4 @@
+switch.wake_on_lan:
+  friendly_name: Josh PC
+binary_sensor.konnected_44c06e_zone_1:
+  friendly_name: Sensor Front Door

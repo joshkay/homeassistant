@@ -1,0 +1,163 @@
+title: 407-31 Avondale Ave.
+
+resources:
+  - url: /local/mini-media-player-bundle.js?v=1.0.0
+    type: js
+  - url: /local/tracker-card.js?v=0.3.0
+    type: js
+
+views:
+  - title: Home
+    cards:
+      - type: entity-filter
+        title: Devices On
+        entities:
+          - group.all_lights
+          - switch.office_desk
+          - media_player.office_tv
+          - media_player.master_bedroom_tv
+        state_filter:
+          - "on"
+          
+      - type: entities
+        title: People
+        entities:
+          - entity: device_tracker.phone_josh_pixel_2_xl
+            name: Josh
+          - entity: device_tracker.phone_heidi_iphone_8
+            name: Heidi
+            
+      - type: entities
+        title: Sensors
+        entities:
+          - entity: binary_sensor.door_front
+            name: Front Door
+          - entity: binary_sensor.door_garage
+            name: Basement Door
+          - entity: binary_sensor.windows_living_room
+            name: Living Room Windows
+            
+      #- type: map
+      #  aspect_ratio: 100%
+      #  default_zoom: 0
+      #  entities:
+      #    - entity: device_tracker.pixel_2_xl
+      #      name: Josh
+          
+      - type: entities
+        title: Front
+        entities:
+          - lock.front_door
+          - light.outside
+          
+      - type: entities
+        title: Basement
+        entities:
+          - lock.garage_door
+          
+      - type: thermostat
+        entity: climate.nest
+    
+      - type: entities
+        entities: 
+          - sensor.nest_humidity
+        
+  - title: Day
+    cards:
+      - type: entities
+        title: Sun
+        entities:
+          - sun.sun
+
+  - title: Living Room
+    icon: mdi:sofa
+    cards:
+      - type: entities
+        title: Lights
+        entities:
+          - light.living_room
+          - light.living_room_chandelier
+          - light.kitchen
+          - light.downstairs
+          - light.1st_floor_stairs
+          - light.upstairs
+          
+      #- type: entities
+      #  title: Trees
+      #  entities:
+      #    - switch.twinkly
+      #    - switch.tree
+        
+      - type: custom:mini-media-player
+        entity: media_player.sonos_living_room_tv
+        
+      - type: custom:mini-media-player
+        entity: media_player.sonos_kitchen
+        
+      - type: custom:mini-media-player
+        entity: media_player.sonos_kitchen_fridge
+
+  - title: Office
+    icon: mdi:office-building
+    cards:
+      - type: entities
+        title: Desk
+        show_header_toggle: false
+        entities:
+          - switch.monitors_office
+          
+      - type: entities
+        title: Lights
+        show_header_toggle: false
+        entities:
+          - light.office
+          - light.upstairs
+
+      - type: custom:mini-media-player
+        entity: media_player.sonos_office_tv
+            
+      - type: custom:mini-media-player
+        entity: media_player.sonos_office
+            
+      - type: entities
+        title: PC
+        show_header_toggle: false
+        entities:
+          - entity: switch.pc_josh
+            name: Josh PC
+            
+  - title: Master Bedroom
+    icon: mdi:bed-empty
+    cards:
+      - type: entities
+        title: Lights
+        entities:
+          - light.upstairs
+          
+      - type: custom:mini-media-player
+        entity: media_player.chromecast_master_bedroom_tv
+        
+      - type: custom:mini-media-player
+        entity: media_player.sonos_master_bedroom_tv
+        
+      - type: custom:mini-media-player
+        entity: media_player.sonos_master_bathroom
+            
+  - title: Basement
+    icon: mdi:stairs
+    cards:
+      - type: entities
+        title: Lights
+        entities:
+          - light.downstairs
+          - light.basement
+          - light.laundry
+          
+  - title: Home Assistant
+    icon: mdi:home-assistant
+    cards:
+      - type: custom:tracker-card
+        title: Updates
+        trackers:
+          - sensor.custom_card_tracker
+          - sensor.custom_component_tracker

@@ -1,0 +1,342 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 43.758022
+  longitude: -79.408127
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 181
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Toronto
+  # Customization file
+  customize: !include customize.yaml
+  
+http:
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - 192.168.10.32
+  trusted_networks:
+    - 127.0.0.1
+    - 192.168.10.32
+  base_url: https://hass.yakhome.tk
+
+# Enables the frontend
+frontend:
+  themes:
+    dark-mode:
+      # Main Stuff #
+      primary-color: "#0179d8" # Primary (most of the UI)
+      primary-background-color: "#060606" # Primary background colour (dialogs, e.t.c)
+      secondary-background-color: "#060606" # Secondary background colour (main UI background)
+      paper-card-background-color: "#131313" # Card background colour
+      paper-item-icon-color: "#0179d8" # Icon colour
+      primary-text-color: "#FFFFFF" # Primary text colour
+      secondary-text-color: "rgba(255, 255, 255, 0.5)" # Secondary text colour
+      disabled-text-color: "rgba(255, 255, 255, 0.5)" # Disabled text colour
+      divider-color: "rgba(255, 255, 255, 0.12)" # Divider colour
+      paper-card-header-color: "#FFFFFF" # Card header text colour
+
+      # Nav Menu #
+      paper-listbox-background-color: "#131313" # Listbox background colour
+      paper-listbox-color: "#FFFFFF" # Listbox text colour
+      paper-grey-200: "#060606" # Listbox selected item background colour
+
+      # Switches #
+      paper-toggle-button-checked-ink-color: "#d80129"
+      paper-toggle-button-checked-button-color: "#0179d8"
+      paper-toggle-button-checked-bar-color: "#FFFFFF"
+
+      # Sliders #
+      paper-slider-knob-color: "#0179d8"
+      paper-slider-knob-start-color: "#0179d8"
+      paper-slider-pin-color: "#0179d8"
+      paper-slider-active-color: "#0179d8"
+      paper-slider-secondary-color: "#0179d8"
+
+      # Tables #
+      table-row-background-color: transparant
+      table-row-alternative-background-color: transparant
+
+lovelace:
+  mode: yaml
+  
+# Enables configuration UI
+config:
+
+hassio:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+  
+custom_updater:
+  show_installable: false
+  track:
+    - components
+    - cards
+    - python_scripts
+  card_urls:
+    - https://raw.githubusercontent.com/custom-cards/tracker-card/master/tracker-card.json 
+    - https://raw.githubusercontent.com/arsaboo/homeassistant-config/master/www/custom_ui/weather-card.json 
+    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/mini-media-player.json 
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+logger:
+  default: warning
+  logs:
+    homeassistant.components.media_player.spotify: info
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+# Database Recorder
+recorder:
+  purge_keep_days: 5
+  purge_interval: 1
+
+mqtt:
+  password: !secret mqtt_password
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+# Sidebar panels
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: https://hass-configurator.yakhome.tk
+    
+  terminal:
+    title: Terminal
+    icon: mdi:console
+    url: https://hass-terminal.yakhome.tk
+    
+  icons:
+    title: Icons
+    icon: mdi:image-outline
+    url: https://materialdesignicons.com/
+    
+  node_red:
+    title: Node Red
+    icon: mdi:resistor-nodes
+    url: https://hass-node-red.yakhome.tk
+    
+weblink:
+  entities:
+    - name: Unifi
+      url: http://192.168.0.3/
+      
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_client_id
+    client_secret: !secret spotify_client_secret
+    
+    
+device_tracker:
+  - platform: unifi
+    host: 192.168.0.3
+    username: !secret unifi_username
+    password: !secret unifi_password
+    verify_ssl: false
+    new_device_defaults:
+      track_new_devices: false
+      hide_if_away: false
+
+  # Bluetooth device tracker not working with VirtualBox
+  #- platform: bluetooth_tracker
+  #  interval_seconds: 15
+  #  consider_home: 150
+  
+# Sensors
+sensor:
+  # Weather prediction
+  - platform: yr
+  
+  # Hue Dimmer Switch
+  - platform: hue
+    ip_address: 192.168.30.20
+    token: !secret hue_token 
+    
+  # QBittorrent
+  - platform: qbittorrent
+    name: qbittorrent
+    host: !secret qbittorrent_host
+    username: !secret qbittorrent_username
+    password: !secret qbittorrent_password
+    monitored_variables:
+      - 'current_status'
+      - 'total_torrents'
+      - 'active_torrents'
+      - 'inactive_torrents'
+      - 'downloading_torrents'
+      - 'seeding_torrents'
+      - 'resumed_torrents'
+      - 'paused_torrents'
+      - 'completed_torrents'
+      - 'download_speed'
+      - 'upload_speed'
+  
+zwave:
+  usb_path: /dev/ttyACM0
+  network_key: !secret zwave_network_key
+  device_config:
+    light.living_room:
+      refresh_value: true
+      delay: 1
+    light.kitchen:
+      refresh_value: true
+      delay: 1
+      
+# Video Camera Feed
+ffmpeg:
+  ffmpeg_bin: /usr/bin/ffmpeg
+  
+camera:
+  - platform: ffmpeg
+    input: -rtsp_transport tcp -i rtsp://192.168.0.3:7447/6ySyiNj68iPrNd3I
+    name: outside_front_door
+
+# Konnected
+konnected:
+  api_host: http://192.168.10.30:8123
+  #host: 192.168.30.28
+  access_token: !secret konnected_token
+  devices:
+    - id: b4e62d44c06e
+      binary_sensors:
+        - zone: 1
+          type: door
+          name: door_front
+        - zone: 2
+          type: door
+          name: windows_living_room
+        - zone: 3
+          type: door
+          name: door_garage
+      switches:
+        - zone: out
+          name: siren
+
+# Nest
+nest:
+  client_id: !secret nest_id
+  client_secret: !secret nest_secret
+
+# Hue
+hue:
+  bridges:
+    - host: 192.168.30.20
+      allow_unreachable: true
+      allow_hue_groups: true
+   
+# Google Cast
+cast:
+  media_player:
+  - host: 192.168.30.80
+  - host: 192.168.30.81
+  
+# Sonos
+sonos:
+  media_player:
+    hosts:
+      - 192.168.30.50
+      - 192.168.30.51
+      - 192.168.30.52
+      - 192.168.30.53
+      - 192.168.30.60
+      - 192.168.30.61
+      - 192.168.30.62
+      
+# Harmony
+remote:
+  - platform: harmony
+    name: harmony_hub_office
+    host: 192.168.30.24
+    
+# TV
+media_player:
+  - platform: samsungtv
+    name: tv_master_bedroom
+    host: 192.168.30.71
+    timeout: 1
+    mac: "00:21:19:fe:43:1c"
+   
+# August    
+august:
+  login_method: email
+  username: !secret august_username
+  password: !secret august_password
+
+switch:  
+    # TP Link Switch
+  - platform: tplink
+    name: monitors_office
+    host: 192.168.30.31
+    
+  - platform: tplink
+    name: monitor_server
+    host: 192.168.30.30
+    
+    # JOSH-PC
+  - platform: wake_on_lan
+    name: pc_josh
+    mac_address: "18:A6:F7:00:A8:F9"
+    
+    # TV
+  - platform: wake_on_lan
+    name: tv_master_bedroom
+    mac_address: "00:21:19:fe:43:1c"
+    
+  - platform: qbittorrent
+    name: qbittorrent_speed_throttle
+    host: !secret qbittorrent_host
+    username: !secret qbittorrent_username
+    password: !secret qbittorrent_password
+    
+    # Twinkly
+  #- platform: command_line
+  #  name: Twinkly
+  #  switches:
+  #    twinkly:
+  #      command_on: "python3 /config/python_scripts/twinkly.py 192.168.30.29 on"
+  #      command_off: "python3 /config/python_scripts/twinkly.py 192.168.30.29 off" 
+  #      command_state: "python3 /config/python_scripts/twinkly.py 192.168.30.29 state"
+  #      value_template: "{{ value == \"1\" }}"
+  #      friendly_name: Twinkly
