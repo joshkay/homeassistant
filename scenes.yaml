@@ -1,0 +1,310 @@
+- id: '1656819242852'
+  name: Home Off
+  entities:
+    lock.front_door_lock:
+      friendly_name: 'Front Door Lock '
+      supported_features: 0
+      state: locked
+    lock.garage_door_lock:
+      friendly_name: 'Garage Door Lock '
+      supported_features: 0
+      state: locked
+    switch.bathroom_night_light:
+      friendly_name: Office Vent
+      state: 'off'
+    remote.harmony_hub:
+      activity_list:
+      - PC
+      - TV
+      - PS4
+      current_activity: PowerOff
+      activity_starting:
+      devices_list:
+      - Office TV (2)
+      - TV Bedroom
+      - Kitchen Fridge
+      - Office
+      - Master Bedroom
+      - Living Room
+      - Living Room TV
+      - Amazon Fire TV
+      - TV Office
+      - Bathroom 2
+      - NVIDIA Game Console
+      - Kitchen
+      last_activity: TV
+      friendly_name: Harmony Hub
+      supported_features: 4
+      state: 'off'
+    select.harmony_hub_activities:
+      options:
+      - power_off
+      - PC
+      - PS4
+      - TV
+      icon: mdi:remote-tv-off
+      friendly_name: Harmony Hub Activities
+      state: power_off
+    light.basement_door:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Basement Door '
+      supported_features: 32
+      state: 'off'
+    light.basement_stair_lights:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Basement Stair Lights '
+      supported_features: 32
+      state: 'off'
+    light.laundry_door:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Laundry Door '
+      supported_features: 32
+      state: 'off'
+    light.storage:
+      effect_list:
+      - None
+      - candle
+      supported_color_modes:
+      - brightness
+      effect:
+      color_mode:
+      brightness:
+      mode: normal
+      dynamics: none
+      friendly_name: Storage
+      supported_features: 44
+      state: 'off'
+    light.living_room_pots:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Living Room Pots '
+      supported_features: 32
+      state: 'off'
+    light.dining_room_pots:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Dining Room Pots '
+      supported_features: 32
+      state: 'off'
+    light.kitchen_pots:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Kitchen Pots '
+      supported_features: 32
+      state: 'off'
+    light.dining_room_chandelier:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Dining Room Chandelier '
+      supported_features: 32
+      state: 'off'
+    light.dining_sideboard_lamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - None
+      - candle
+      - fire
+      - prism
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      mode: normal
+      dynamics: none
+      friendly_name: Dining Sideboard Lamp
+      supported_features: 44
+      state: 'off'
+    light.front_hallway_pots:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Front Hallway Pots '
+      supported_features: 32
+      state: 'off'
+    light.front_hallway_pots_basic:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Front Hallway Pots Basic
+      supported_features: 0
+      state: 'on'
+    light.outside:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Outside '
+      supported_features: 32
+      state: 'off'
+    light.office_stairs:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Office Stairs '
+      supported_features: 32
+      state: 'off'
+    light.office:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Office '
+      supported_features: 32
+      state: 'off'
+    light.guest_bedroom:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Guest Bedroom '
+      supported_features: 32
+      state: 'off'
+    light.master_stairs:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Stairs '
+      supported_features: 32
+      state: 'off'
+    light.master_chandelier:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Chandelier '
+      supported_features: 32
+      state: 'off'
+    light.master_chandelier_basic:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Master Chandelier Basic
+      supported_features: 0
+      state: 'off'
+    light.master_pendants:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Pendants '
+      supported_features: 32
+      state: 'off'
+    light.master_bathroom_hallway:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Bathroom Hallway '
+      supported_features: 32
+      state: 'off'
+    light.master_bathroom_hallway_basic:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: Master Bathroom Hallway Basic
+      supported_features: 0
+      state: 'off'
+    light.master_barn_closet:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Barn Closet '
+      supported_features: 32
+      state: 'off'
+    light.master_bathroom_pots:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Bathroom Pots '
+      supported_features: 32
+      state: 'off'
+    light.master_bathroom_balls:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Bathroom Balls '
+      supported_features: 32
+      state: 'off'
+    light.master_shower:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      friendly_name: 'Master Shower '
+      supported_features: 32
+      state: 'off'
+    switch.master_shower:
+      friendly_name: 'Master Shower '
+      state: 'off'
+    switch.master_shower_1:
+      icon: mdi:fan
+      friendly_name: Master Shower Fan
+      state: 'off'
+    switch.master_vent_north:
+      linkquality: 255
+      power_on_behavior:
+      update:
+        installed_version: -1
+        latest_version: -1
+        state: available
+      update_available: true
+      friendly_name: Master Vent North
+      state: 'off'
+    switch.master_vent_south:
+      linkquality: 255
+      power_on_behavior:
+      update:
+        installed_version: -1
+        latest_version: -1
+        state: available
+      update_available: true
+      friendly_name: Master Vent South
+      state: 'off'
+    switch.master_vent_west:
+      linkquality: 255
+      power_on_behavior:
+      update:
+        installed_version: -1
+        latest_version: -1
+        state: available
+      update_available: true
+      friendly_name: Master Vent West
+      state: 'off'
+  icon: mdi:home-off
+  metadata: {}

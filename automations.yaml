@@ -1,1 +1,573 @@
-[]
+- id: '1691587556925'
+  alias: Agent Conversation - Daily Agenda
+  description: ''
+  use_blueprint:
+    path: allenporter/notify_agent_agenda.yaml
+    input:
+      conversation_agent: conversation.openai_conversation
+      weather_entity: weather.toronto_hourly
+      notify_time: 09:00:00
+      calendar_entity: calendar.family
+      zone_entity: zone.home
+- id: '1693330439901'
+  alias: Low battery level detection - Josh
+  description: ''
+  use_blueprint:
+    path: sbyx/low-battery-level-detection-notification-for-all-battery-sensors.yaml
+    input:
+      actions:
+      - service: notify.mobile_app_josh_phone
+        data:
+          message: The battery of the sensor(s) `{{sensors}}` is low.
+- id: '1708202920766'
+  alias: Office Blinds - Cover Control Automation (CCA)
+  description: ''
+  use_blueprint:
+    path: hvorragend/cover_control_automation.yaml
+    input:
+      blind: cover.office_blinds
+      auto_options:
+      - auto_sun_enabled
+      - auto_up_enabled
+      - auto_down_enabled
+      auto_global_condition:
+      - condition: state
+        entity_id: binary_sensor.office_sensor_motion_detection
+        state: 'on'
+        for:
+          hours: 0
+          minutes: 0
+          seconds: 0
+      resident_sensor: binary_sensor.office_sensor_motion_detection
+- id: '1708203667553'
+  alias: Office - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.office_sensor_motion_detection
+      light_switch:
+        entity_id: light.office
+      time_delay: 20
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_office_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 120
+- id: '1708204852566'
+  alias: Basement Stairs - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.basement_stairs_sensor_motion_detection
+      - binary_sensor.garage_door
+      light_switch:
+        entity_id: light.basement
+      time_delay: 15
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_on: []
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_basement_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 121
+- id: '1708204896968'
+  alias: Upstairs - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.office_stairs_sensor_motion_detection
+      light_switch:
+        entity_id:
+        - light.office_stairs
+        - light.master_stairs
+      time_delay: 5
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_upstairs_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 120
+- id: '1708204988301'
+  alias: Dining Room - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.dining_room_sensor_light_group
+      light_switch:
+        entity_id: light.dining_room_chandelier
+      time_delay: 120
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_dining_room_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 120
+- id: '1708205377580'
+  alias: Outside - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.front_person_occupancy
+      - binary_sensor.front_door
+      light_switch:
+        entity_id: light.outside
+      time_delay: 1
+      include_sun: sun_enabled
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_outside_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 120
+- id: '1708371487796'
+  alias: Master Vents - AC
+  description: ''
+  triggers:
+  - entity_id:
+    - climate.thermostat
+    trigger: state
+    attribute: hvac_action
+  conditions:
+  - condition: state
+    entity_id: input_boolean.disable_automation_master_vents
+    state: 'off'
+  actions:
+  - if:
+    - condition: state
+      entity_id: climate.thermostat
+      state: cooling
+      attribute: hvac_action
+    then:
+    - metadata: {}
+      data: {}
+      action: switch.turn_on
+      target:
+        entity_id: switch.master_vents
+    else:
+    - target:
+        entity_id:
+        - switch.master_vents
+      data: {}
+      action: switch.turn_off
+  mode: single
+- id: '1708379681860'
+  alias: Front Hallway - Sensor Light
+  description: ''
+  use_blueprint:
+    path: Blackshome/sensor-light.yaml
+    input:
+      motion_trigger:
+      - binary_sensor.front_door
+      light_switch:
+        entity_id:
+        - light.front_hallway_pots
+      time_delay: 30
+      include_light_control:
+      - use_transition
+      include_bypass:
+      - bypass_enabled_stop
+      motion_bypass_lights_stop:
+      - input_boolean.disable_automation_front_lights
+      include_bypass_auto_off:
+      - bypass_auto_off_enabled_stop
+      bypass_auto_off_delay: 120
+- id: '1708914036657'
+  alias: Frigate Notifications - Josh - Front
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.front
+      base_url: https://hass.yakhome.ca
+      alert_once: true
+      update_thumbnail: true
+      icon: mdi:cctv
+      zone_filter: true
+      zones:
+      - patio
+      notify_device: 968b200d8dee14d044a9f1aa8a984639
+      sound: none
+      critical: 'true'
+- id: '1709169889720'
+  alias: Front Door - Button
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 2ca034eeb289b989936e507b6dfc7078
+    type: click
+    subtype: single
+  condition: []
+  action:
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.front_door
+      from: 'on'
+      to: 'off'
+    timeout:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+    continue_on_timeout: false
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.home_off
+  mode: single
+- id: '1709169970921'
+  alias: Garage Door - Button
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 4e546b915cb4097e21a065a63dd8c32b
+    type: click
+    subtype: single
+  condition: []
+  action:
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.garage_door
+      from: 'on'
+      to: 'off'
+    timeout:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+    continue_on_timeout: false
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.home_off
+  mode: single
+- id: '1710113630556'
+  alias: Office Blinds - Motion
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.office_sensor_motion_detection
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.disable_automation_office_lights
+    state: 'off'
+  action:
+  - if:
+    - condition: sun
+      before: sunrise
+      after: sunset
+    then:
+    - if:
+      - condition: numeric_state
+        entity_id: cover.office_blinds
+        attribute: current_position
+        above: 95
+      then:
+      - service: cover.close_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.office_blinds
+    else:
+    - if:
+      - condition: numeric_state
+        entity_id: cover.office_blinds
+        attribute: current_position
+        below: 5
+      then:
+      - service: cover.open_cover
+        metadata: {}
+        data: {}
+        target:
+          entity_id: cover.office_blinds
+  mode: single
+- id: '1710185667812'
+  alias: Frigate Notifications - Ayda - Front
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.front
+      base_url: https://hass.yakhome.ca
+      alert_once: true
+      update_thumbnail: true
+      icon: mdi:cctv
+      zone_filter: true
+      zones:
+      - patio
+      notify_device: e79c0e63527359187775496de5bed5ca
+      sound: none
+      critical: 'false'
+- id: '1727282889201'
+  alias: Front Door - Turn on Chandelier
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.front_door
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      transition: 1
+    target:
+      entity_id: light.dining_room_chandelier
+  mode: single
+- id: '1752109420815'
+  alias: Weather Forecast Alert Helper
+  description: ''
+  use_blueprint:
+    path: travipross/weather-notifier.yaml
+    input:
+      weather_entity: weather.toronto
+      alert_triggers:
+      - trigger: time_pattern
+        hours: /1
+      notify_service: mobile_app_josh_phone
+      enable_hot_alert: true
+      num_hours_threshold: 1
+- id: '1752113353982'
+  alias: Patio Cushion Rain Alert
+  description: ''
+  triggers:
+  - hours: /1
+    trigger: time_pattern
+  conditions: []
+  actions:
+  - variables:
+      weather_entity: weather.toronto
+      notify_group: mobile_app_josh_phone
+      num_hours_threshold: 1
+      num_hours_lookahead: 12
+      rain_keywords:
+      - rain
+      - rainy
+      - shower
+      - drizzle
+      - pour
+      - thunder
+      - sleet
+      - wet
+  - target:
+      entity_id: '{{ weather_entity }}'
+    data:
+      type: hourly
+    response_variable: action_response
+    action: weather.get_forecasts
+  - variables:
+      forecast: '{{ action_response[weather_entity][''forecast''][:num_hours_lookahead]
+        }}'
+      datetimes: '{{ forecast | map(attribute=''datetime'') | map(''as_datetime'')
+        | map(''as_local'') | list }}'
+      rainy_hours: "{% set keywords = rain_keywords %} {% set rainy = namespace(items=[])
+        %} {% for f in forecast %}\n  {% set cond = (f.condition or '') | lower %}\n
+        \ {% for k in keywords %}\n    {% if k in cond %}\n      {% set rainy.items
+        = rainy.items + [f] %}\n      {% break %}\n    {% endif %}\n  {% endfor %}\n{%
+        endfor %} {{ rainy.items }}"
+      precip_prob_rainy_hours: '{{ rainy_hours | map(attribute=''precipitation_probability'')
+        | list }}'
+      current_raining: "{% set condition = states(weather_entity) | string | lower
+        %} {% set keywords = rain_keywords %} {% for k in keywords %}\n  {% if k in
+        condition %}\n    {{ true }}\n    {% break %}\n  {% endif %}\n{% endfor %}
+        {{ false }}"
+      next_rain_time: "{% if rainy_hours %}\n  {{ as_local(as_datetime(rainy_hours[0].datetime))
+        }}\n{% else %}\n  none\n{% endif %}"
+      next_rain_in_human: "{% if rainy_hours %}\n  {% set delta = as_local(as_datetime(rainy_hours[0].datetime))
+        - now() %}\n  {% set hours = (delta.total_seconds() // 3600) | int %}\n  {%
+        set minutes = ((delta.total_seconds() % 3600) // 60) | int %}\n  {% if hours
+        > 0 and minutes > 0 %}\n    {{ hours }}h {{ minutes }}m\n  {% elif hours >
+        0 %}\n    {{ hours }}h\n  {% else %}\n    {{ minutes }}m\n  {% endif %}\n{%
+        else %}\n  unknown\n{% endif %}"
+      next_precip_prob: "{% if rainy_hours and rainy_hours[0].precipitation_probability
+        is defined %}\n  {{ rainy_hours[0].precipitation_probability }}\n{% else %}\n
+        \ 0\n{% endif %}"
+      rain_alert: '{{ current_raining or (rainy_hours | count > num_hours_threshold)
+        }}'
+  - condition: template
+    value_template: '{{ rain_alert }}'
+  - data:
+      remember: false
+      include_filename: false
+      target_width: 1280
+      max_tokens: 100
+      expose_images: true
+      provider: 01JZPNPWE508AZS15G4DS7MAF4
+      message: 'You are analyzing a security camera image of a wooden patio with wicker
+        furniture. The camera is positioned above the deck. The deck has a loveseat,
+        two chairs, and a coffee table.
+
+        The wicker furniture may or may not have cushions. Cushions are lighter in
+        color than the wicker itself, which is dark. Cushions are expected to be clearly
+        visible on the seats and backs if present.
+
+        Look carefully at each seat and backrest of the furniture. Respond with one
+        of the following options:
+
+        YES – if you clearly see cushions on any of the furniture.
+
+        NO – if there are no cushions visible on any of the furniture.
+
+        Answer ONLY with YES or NO.'
+      image_entity:
+      - camera.backyard_camera_high_resolution_channel
+    response_variable: llm_response
+    action: llmvision.image_analyzer
+  - condition: template
+    value_template: '{{ llm_response.response_text == ''YES'' }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ current_raining }}'
+      sequence:
+      - variables:
+          notification_title: ⚠️ It’s raining and the cushions are still out!
+          notification_message: 'It’s currently raining.   There’s a {{ next_precip_prob
+            }}% chance it will continue for the next {{ rainy_hours | count }} hours.
+
+            '
+          notification_icon: mdi:weather-pouring
+          notification_priority: high
+          notification_ttl: 0
+          notification_sound: default
+    default:
+    - variables:
+        notification_title: Rain is coming — bring in the cushions
+        notification_message: 'Rain is expected in {{ next_rain_in_human }} with a
+          {{ next_precip_prob }}% chance.   It''s expected to last up to {{ rainy_hours
+          | count }} hours.
+
+          '
+        notification_icon: mdi:weather-cloudy-alert
+        notification_priority: high
+        notification_ttl: 0
+        notification_sound: none
+  - data:
+      message: '{{ notification_message }}'
+      title: '{{ notification_title }}'
+      data:
+        ttl: '{{ notification_ttl }}'
+        priority: '{{ notification_priority }}'
+        tag: CUSHION_RAIN_ALERT
+        sticky: true
+        clickAction: entityId:{{ weather_entity }}
+        notification_icon: '{{ notification_icon }}'
+        sound: '{{ notification_sound }}'
+        image: '{{ (llm_response.key_frame or '''') | regex_replace(find=''/config/www/'',
+          replace=''/local/'', ignorecase=False) }}'
+    action: notify.{{ notify_group }}
+  mode: single
+- id: '1752120313118'
+  alias: Garbage Bin Curb Check
+  description: ''
+  triggers:
+  - at: '20:00:00'
+    trigger: time
+  conditions:
+  - condition: template
+    value_template: "{% set next = state_attr('calendar.waste_collection_schedule',
+      'start_time') %} {% if next %}\n  {{ (as_datetime(next).date() - now().date()).days
+      == 1 }}\n{% else %}\n  false\n{% endif %}"
+  actions:
+  - alias: Run image analysis on garage camera
+    data:
+      remember: false
+      include_filename: false
+      target_width: 1280
+      max_tokens: 100
+      expose_images: true
+      provider: 01JZPNPWE508AZS15G4DS7MAF4
+      message: 'This is an image of the front of the house from a security camera.
+        You are checking whether garbage bins have been placed by the curb.
+
+        Look for any black, blue, or green rectangular bins on the curb or sidewalk
+        near the driveway.
+
+        Respond with: YES — if you clearly see any bins by the curb. NO — if there
+        are no bins placed out.'
+      image_entity:
+      - camera.garage_camera_high_resolution_channel
+    response_variable: llm_response
+    action: llmvision.image_analyzer
+  - alias: Only notify if bins are not seen
+    condition: template
+    value_template: '{{ llm_response.response_text == ''NO'' }}'
+  - alias: Send reminder notification
+    data:
+      title: "\U0001F5D1️ Garbage Reminder"
+      message: Garbage day is tomorrow, but the bins aren’t out. Don’t forget to take
+        them to the curb!
+      data:
+        tag: GARBAGE_BIN_ALERT
+        sticky: true
+        priority: high
+        ttl: 0
+        notification_icon: mdi:trash-can
+        image: '{{ (llm_response.key_frame or '''') | regex_replace(find=''/config/www/'',
+          replace=''/local/'', ignorecase=False) }}'
+    action: notify.mobile_app_josh_phone
+  mode: single
+- id: '1753105437783'
+  alias: New automation
+  description: ''
+  triggers:
+  - entity_id:
+    - climate.thermostat
+    trigger: state
+    attribute: hvac_action
+  conditions:
+  - condition: state
+    entity_id: input_boolean.disable_automation_office_vents
+    state: 'off'
+  actions:
+  - if:
+    - condition: state
+      entity_id: climate.thermostat
+      state: cooling
+      attribute: hvac_action
+    then:
+    - metadata: {}
+      data: {}
+      action: switch.turn_on
+      target:
+        entity_id:
+        - switch.office_vents
+    else:
+    - data: {}
+      action: switch.turn_off
+      target:
+        entity_id: switch.office_vents
+  mode: single
